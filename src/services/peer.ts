@@ -1,11 +1,6 @@
 import Peer from 'peerjs';
 
-const peerInstance = new Peer({
-    host: import.meta.env.VITE_PEER_HOST,
-    port: Number(import.meta.env.VITE_PEER_PORT),
-    path: '/',
-    secure: true
-});
+const peerInstance = new Peer();
 
 peerInstance.on('open', (peerId) => {
     console.log('peerId: ', peerId);
