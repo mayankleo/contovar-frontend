@@ -21,13 +21,7 @@ const Dashboard = () => {
   }, []);
 
   const handleImageUpload = (imageFile) => {
-    return Tesseract.recognize(
-      imageFile,
-      'eng',
-      {
-        logger: (info) => console.log(info) 
-      }
-    ).then(({ data: { text } }) => {
+    return Tesseract.recognize(imageFile, 'eng').then(({ data: { text } }) => {
       setExtractedText(text);
       socketInstance.emit('geminiResume', { resumeDescription: text, questions: question });
     });
@@ -76,7 +70,7 @@ const Dashboard = () => {
 
   return (
     <div className="container mx-auto p-6">
-       <button onClick={logout} className='mb-4'>Logout</button>
+      <button onClick={logout} className='mb-4'>Logout</button>
       <div className="flex flex-col space-y-6">
         <div className="w-full bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4 text-primary">Upload Your Resume Image</h2>

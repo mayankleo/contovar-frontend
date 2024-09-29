@@ -15,7 +15,7 @@ const NavBar = () => {
         mock: '/mock',
     };
 
-    const getButtonClasses = (path) => {
+    const getButtonClasses = (path: string) => {
         return location.pathname === path;
     };
 

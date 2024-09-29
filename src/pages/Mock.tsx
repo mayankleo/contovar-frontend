@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import socketInstance from "../services/socket";
 import peerInstance from '../services/peer';
 
 const Auth = () => {
   const [query, setQuery] = useState('');
-  const [output, setOutput] = useState([]);
+  const [output, setOutput] = useState('');
 
   useEffect(() => {
     socketInstance.emit('mock', { id: peerInstance.id });
@@ -13,7 +13,7 @@ const Auth = () => {
     });
   }, []);
 
-  const textToSpeech = (text) => {
+  const textToSpeech = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
     speechSynthesis.speak(utterance);
   }
@@ -47,7 +47,7 @@ const Auth = () => {
   }
 
 
-  const handleQuery = async (e) => {
+  const handleQuery = async (e: FormEvent) => {
     e.preventDefault();
     socketInstance.emit('mock', { id: peerInstance.id, q: query });
   };

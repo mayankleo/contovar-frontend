@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import socketInstance from '../services/socket';
 
 const PromptGen = () => {
@@ -15,7 +15,7 @@ const PromptGen = () => {
     });
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -54,7 +54,7 @@ const PromptGen = () => {
             value={formData.jobDescription}
             onChange={handleChange}
             name='jobDescription'
-            rows="8"
+            rows={8}
             className="w-full border-2 p-2 rounded-md border-primary"
             placeholder="Enter job description here"
           ></textarea>

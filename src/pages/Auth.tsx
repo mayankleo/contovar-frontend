@@ -12,21 +12,19 @@ const Auth = () => {
         email: 'admin@admin.admin'
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSignIn = async (e) => {
+    const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Signing in:", formData);
-        await socketInstance.timeout(5000).emit('login', formData, async (err, response) => {
+        await socketInstance.timeout(5000).emit('login', formData, (err: never, response: { status: boolean, message: string, token: string }) => {
             if (err) {
                 console.log(err);
             } else {
                 if (response.status) {
                     Cookies.set('access_token', response.token);
-                    console.log(response.message);
                     navigate('/dashboard');
                 } else {
                     alert(response.message);
@@ -35,16 +33,14 @@ const Auth = () => {
         });
     };
 
-    const handleSignUp = async (e) => {
+    const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Signing up:", formData);
-        await socketInstance.timeout(5000).emit('register', formData, async (err, response) => {
+        await socketInstance.timeout(5000).emit('register', formData, (err: never, response: { status: boolean, message: string, token: string }) => {
             if (err) {
                 console.log(err);
             } else {
                 if (response.status) {
                     Cookies.set('access_token', response.token);
-                    console.log(response.message);
                     navigate('/dashboard');
                 } else {
                     alert(response.message);
@@ -56,7 +52,7 @@ const Auth = () => {
     return (
         <div className="flex items-center justify-center">
             <div className="w-1/2 shadow-md flex flex-col p-5 rounded-md gap-8 text-center">
-            <h1 className="text-5xl text-primary">Sign Up/In</h1>
+                <h1 className="text-5xl text-primary">Sign Up/In</h1>
                 <div className="flex gap-5">
                     <button className={`w-full bg-white text-primary border-2 border-primary ${signIn ? '!bg-primary text-white border-0' : ''}`} onClick={() => setSignIn(true)}>Sign In</button>
                     <button className={`w-full bg-white text-primary border-2 border-primary ${!signIn ? '!bg-primary text-white border-0' : ''}`} onClick={() => setSignIn(false)}>Sign Up</button>

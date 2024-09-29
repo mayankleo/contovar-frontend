@@ -23,7 +23,7 @@ const Interview = () => {
       alert("Enter room code");
       return
     }
-    await socketInstance.timeout(5000).emit('create-room', { roomId, peerId }, async (err, response) => {
+    await socketInstance.timeout(5000).emit('create-room', { roomId, peerId }, async (err: never, response: { status: boolean, message: string}) => {
       if (err) {
         console.log(err);
       } else {
@@ -43,7 +43,7 @@ const Interview = () => {
       alert("Enter room code");
       return
     }
-    await socketInstance.timeout(5000).emit('join-room', { roomId, peerId }, async (err, response) => {
+    await socketInstance.timeout(5000).emit('join-room', { roomId, peerId }, async (err: never, response: { status: boolean, message: string, peerId: string }) => {
       if (err) {
         console.log(err);
       } else {

@@ -1,10 +1,10 @@
 import Peer from 'peerjs';
 
 const peerInstance = new Peer({
-    // host: '192.168.67.0',
-    host: 'localhost',
-    port: 5001,
+    host: import.meta.env.VITE_PEER_HOST,
+    port: Number(import.meta.env.VITE_PEER_PORT),
     path: '/',
+    secure: true
 });
 
 peerInstance.on('open', (peerId) => {

@@ -5,9 +5,12 @@ import { python } from '@codemirror/lang-python';
 import * as Babel from '@babel/standalone';
 import { loadPyodide } from 'pyodide';
 import socketInstance from '../services/socket';
-import PropTypes from 'prop-types';
 
-const CodeIDLE = ({ roomId }) => {
+interface CodeIDLEProps {
+    roomId: string;
+}
+
+const CodeIDLE = ({ roomId }: CodeIDLEProps) => {
     const [code, setCode] = useState('//Write code here');
     const [output, setOutput] = useState('Output show here!');
     const [pyodide, setPyodide] = useState(null);
@@ -15,7 +18,9 @@ const CodeIDLE = ({ roomId }) => {
 
     useEffect(() => {
         const initPyodide = async () => {
-            const pyodideInstance = await loadPyodide();
+            const pyodideInstance = await loadPyodide({
+                indexURL:"/node_modules/pyodide/"
+            });
             setPyodide(pyodideInstance);
         };
         initPyodide();
@@ -29,11 +34,11 @@ const CodeIDLE = ({ roomId }) => {
 
     const runCode = async () => {
         if (language == "javascript") {
-            let finalResult;
+            let finalResult: string;
             try {
                 const transformedCode = Babel.transform(code, { presets: ['es2015'] }).code;
                 const originalLog = console.log;
-                const outputArray = [];
+                const outputArray:string[] = [];
                 console.log = (...args) => outputArray.push(args.join(' '));
                 const result = eval(transformedCode);
                 console.log = originalLog;
@@ -45,10 +50,10 @@ const CodeIDLE = ({ roomId }) => {
             setOutput(finalResult);
             socketInstance.emit('codesync', { code: code, output: finalResult, roomId });
         } else {
-            let finalResult;
+            let finalResult: string;
             try {
                 const originalLog = console.log;
-                const outputArray = [];
+                const outputArray: string[] = [];
                 console.log = (...args) => outputArray.push(args.join(' '));
                 // const result = await pyodide.runPython(code);
                 await pyodide.runPython(code);
@@ -56,7 +61,7 @@ const CodeIDLE = ({ roomId }) => {
                 const langOutput = outputArray.join('\n');
                 finalResult = langOutput || "Code executed successfully, no output.";
             } catch (error) {
-                finalResult = error.message;
+                finalResult = String(error.message);
             }
             setOutput(finalResult);
             socketInstance.emit('codesync', { code: code, output: finalResult, roomId });
@@ -87,19 +92,11 @@ const CodeIDLE = ({ roomId }) => {
                         setCode(value);
                         socketInstance.emit('codesync', { code: value, output: output, roomId });
                     }}
-                    options={{
-                        lineNumbers: true,
-                        readOnly: false,
-                    }}
                 />
                 <p className="w-full h-full border-2 p-2">{output}</p>
             </div>
         </div>
     );
-};
-
-CodeIDLE.propTypes = {
-    roomId: PropTypes.string.isRequired,
 };
 
 export default CodeIDLE;
