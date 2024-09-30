@@ -1,9 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../assets/logo.png';
 import Cookies from 'js-cookie';
+import socketInstance from '../services/socket';
+import { useEffect, useState } from 'react';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 const NavBar = () => {
     const location = useLocation();
+    const [connection, setConnection] = useState(false);
+    const [connectionError, setConnectionError] = useState(false);
 
     const paths = {
         home: '/',
@@ -26,10 +31,21 @@ const NavBar = () => {
         return false
     }
 
+    useEffect(() => {
+        socketInstance.on('connect', () => {
+            setConnection(true);
+        });
+        socketInstance.on('connect_error', () => {
+            setConnectionError(true);
+        });
+    }, []);
+
     return (
         <nav className="flex justify-between items-center w-full px-4 py-2">
-            <div>
+            <div className='flex items-center gap-4'>
                 <img src={Logo} alt="logo" className="h-12" />
+                {!connection && !connectionError && <ExclamationCircleIcon className='text-primary animate-pulse size-6' title='Connecting to server...' />}
+                {connectionError && <ExclamationCircleIcon className='text-red-600 size-6' title='Failed to connect with server' />}
             </div>
             <div className="flex gap-6 justify-center items-center">
                 <Link to={paths.home}>
