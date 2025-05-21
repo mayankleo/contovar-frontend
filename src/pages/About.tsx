@@ -8,16 +8,16 @@ const About = () => {
       </div>  
       <div className="flex flex-col justify-center pe-20 gap-6">
         <h1 className="text-5xl font-semibold text-primary leading-tight">
-          Meet Team PROMETHEUS
+          A Hackathon Project built by TEAM PROMETHEUS
         </h1>
-        <section className="mb-4">
+{/*         <section className="mb-4">
         <ul className="list-disc list-inside text-gray-700">
             <li><strong>Mayank Kushwaha</strong></li>
             <li><strong>Niharika Singh</strong></li>
             <li><strong>Sahil Patel</strong></li>
             <li><strong>Shreyash Gupta</strong></li>
           </ul>
-        </section>
+        </section> */}
         <section className="mb-6">
           <h2 className="text-4xl font-semibold text-primary opacity-70">Our Project</h2>
           <p className="text-primary mt-5 mb-7">
